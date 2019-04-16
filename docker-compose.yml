@@ -1,0 +1,40 @@
+version: "2"
+
+services:
+  wildfly:
+    container_name: "wildfly"
+    build: .
+    environment:
+      - WILDFLY_USER=admin
+      - WILDFLY_PASS=admin
+      - DB_NAME=projectdb
+      - DB_USER=mysql
+      - DB_PASS=mysql
+      - DB_URI=db:3306
+    depends_on:
+      - db
+    ports:
+      - "8100:8080"     # application
+      - "9990:9990"     # admin console
+      - "8787:8787"     # debug
+    restart: unless-stopped
+
+  db:
+    container_name: "wildfly_database"
+    image: "mysql:latest"
+    environment:
+      - MYSQL_DATABASE=projectdb
+      - MYSQL_USER=mysql
+      - MYSQL_PASSWORD=mysql
+      - MYSQL_ROOT_PASSWORD=supersecret
+      - MYSQL_VERSION=8.0.15
+    volumes:
+      - ./volumes/db/init/:/docker-entrypoint-initdb.d/ # init database
+      - ./volumes/db/data/:/var/lib/mysql/              # data storage
+    ports:
+      - "3100:3306"     #Default
+    restart: unless-stopped
+
+networks:
+  default:
+    driver: bridge
