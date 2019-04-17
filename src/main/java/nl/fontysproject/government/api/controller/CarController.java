@@ -73,6 +73,7 @@ public class CarController {
         }
         carToAssign.setOwnerId(ownerId);
         OwnershipHistory newOwnership = new OwnershipHistory(ownerId, new Date(), null);
+        newOwnership.setCar(carToAssign);
         historyList.add(newOwnership);
         carToAssign.setOwnershipHistoryList(historyList);
         return carService.update(carToAssign);

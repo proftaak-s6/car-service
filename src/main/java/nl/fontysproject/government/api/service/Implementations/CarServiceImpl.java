@@ -45,6 +45,9 @@ public class CarServiceImpl implements CarService {
 
     @Override
     public Car update(Car model) {
+//        Car temp = entityManager.find(Car.class, model.getId());
+//        temp.setOwnershipHistoryList(model.getOwnershipHistoryList());
+
         try {
             transaction.begin();
             entityManager.merge(model);
