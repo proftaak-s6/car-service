@@ -90,23 +90,4 @@ public class CarServiceImpl implements CarService {
         int result = query.executeUpdate();
         return result == 1;
     }
-
-    //TODO: Remove
-    @Override
-    public Car assignToOwner(long carId, long ownerId) {
-//        Car carToAssign = entityManager.find(Car.class, carId);
-//        Owner ownerToAssignTo = entityManager.find(Owner.class, ownerId);
-//        carToAssign.setOwner(ownerToAssignTo);
-//
-//        try {
-//            transaction.begin();
-//            entityManager.merge(carToAssign);
-//            transaction.commit();
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//
-//        return carToAssign;
-        throw new NotImplementedException();
-    }
 }
