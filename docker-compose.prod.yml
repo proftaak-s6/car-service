@@ -1,0 +1,16 @@
+version: "3"
+
+services:
+  car:
+    container_name: "car-service"
+    build: .
+    environment:
+      DB_URL: jdbc:mysql://192.168.178.24:3306/default
+      DB_USER: mysql
+      DB_PASS: mysql
+    ports:
+      - 9100:8080
+    restart: unless-stopped
+networks:
+  default:
+    driver: bridge
