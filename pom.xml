@@ -7,7 +7,7 @@
   <groupId>nl.fontysproject.car-service</groupId>
   <artifactId>car-service</artifactId>
   <version>1.0-SNAPSHOT</version>
-  <packaging>war</packaging>
+  <packaging>jar</packaging>
 
   <name>Car Service</name>
   <url>http://car.fontys-project.com</url>
@@ -16,14 +16,29 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.source>1.8</maven.compiler.source>
     <maven.compiler.target>1.8</maven.compiler.target>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+    <kumuluzee.version>3.4.0</kumuluzee.version>
   </properties>
 
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>com.kumuluz.ee</groupId>
+        <artifactId>kumuluzee-bom</artifactId>
+        <version>${kumuluzee.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+
   <dependencies>
+    <!-- https://mvnrepository.com/artifact/mysql/mysql-connector-java -->
     <dependency>
-      <groupId>javax</groupId>
-      <artifactId>javaee-api</artifactId>
-      <version>8.0</version>
-      <scope>provided</scope>
+      <groupId>mysql</groupId>
+      <artifactId>mysql-connector-java</artifactId>
+      <version>8.0.15</version>
     </dependency>
     <dependency>
       <groupId>org.json</groupId>
@@ -31,60 +46,46 @@
       <version>20180813</version>
     </dependency>
     <dependency>
-      <groupId>com.fasterxml.jackson.core</groupId>
-      <artifactId>jackson-annotations</artifactId>
-      <version>2.9.8</version>
+      <groupId>com.kumuluz.ee</groupId>
+      <artifactId>kumuluzee-core</artifactId>
     </dependency>
     <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>4.11</version>
-      <scope>test</scope>
+      <groupId>com.kumuluz.ee</groupId>
+      <artifactId>kumuluzee-servlet-jetty</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.kumuluz.ee</groupId>
+      <artifactId>kumuluzee-jax-rs-jersey</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.kumuluz.ee</groupId>
+      <artifactId>kumuluzee-cdi-weld</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.kumuluz.ee</groupId>
+      <artifactId>kumuluzee-jpa-hibernate</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.kumuluz.ee</groupId>
+      <artifactId>kumuluzee-jta-narayana</artifactId>
     </dependency>
   </dependencies>
 
   <build>
-    <finalName>government-api</finalName>
-    <pluginManagement><!-- lock down plugins versions to avoid using Maven defaults (may be moved to parent pom) -->
-      <plugins>
-        <plugin>
-          <groupId>org.wildfly.plugins</groupId>
-          <artifactId>wildfly-maven-plugin</artifactId>
-          <version>2.0.0.Final</version>
-          <configuration>
-            <filename>${project.build.finalName}.war</filename>
-          </configuration>
-        </plugin>
-        <plugin>
-          <artifactId>maven-clean-plugin</artifactId>
-          <version>3.1.0</version>
-        </plugin>
-        <!-- see http://maven.apache.org/ref/current/maven-core/default-bindings.html#Plugin_bindings_for_war_packaging -->
-        <plugin>
-          <artifactId>maven-resources-plugin</artifactId>
-          <version>3.0.2</version>
-        </plugin>
-        <plugin>
-          <artifactId>maven-compiler-plugin</artifactId>
-          <version>3.8.0</version>
-        </plugin>
-        <plugin>
-          <artifactId>maven-surefire-plugin</artifactId>
-          <version>2.22.1</version>
-        </plugin>
-        <plugin>
-          <artifactId>maven-war-plugin</artifactId>
-          <version>3.2.2</version>
-        </plugin>
-        <plugin>
-          <artifactId>maven-install-plugin</artifactId>
-          <version>2.5.2</version>
-        </plugin>
-        <plugin>
-          <artifactId>maven-deploy-plugin</artifactId>
-          <version>2.8.2</version>
-        </plugin>
-      </plugins>
-    </pluginManagement>
+    <plugins>
+      <plugin>
+        <groupId>com.kumuluz.ee</groupId>
+        <artifactId>kumuluzee-maven-plugin</artifactId>
+        <version>${kumuluzee.version}</version>
+        <executions>
+          <execution>
+            <id>package</id>
+            <goals>
+              <goal>repackage</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
   </build>
 </project>
