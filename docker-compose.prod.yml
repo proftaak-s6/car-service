@@ -4,6 +4,7 @@ services:
   car:
     container_name: "car-service"
     build: .
+    image: yoksar/car-service
     environment:
       DB_URL: jdbc:mysql://192.168.178.24:3306/default
       DB_USER: mysql
