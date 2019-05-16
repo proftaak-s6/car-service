@@ -5,7 +5,7 @@
              version="2.1">
 
     <persistence-unit name="GovernmentDB" transaction-type="JTA">
-        <jta-data-source>java:/jdbc/datasources/projectdbDS</jta-data-source>
+        <jta-data-source>jdbc/carDb</jta-data-source>
         <properties>
             <property name="hibernate.hbm2ddl.auto" value="update" />
         </properties>
