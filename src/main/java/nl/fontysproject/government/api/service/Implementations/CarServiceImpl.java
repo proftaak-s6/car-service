@@ -9,6 +9,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
+import javax.transaction.Transactional;
 import javax.transaction.UserTransaction;
 import java.util.List;
 
@@ -16,9 +17,6 @@ public class CarServiceImpl implements CarService {
 
     @PersistenceContext(unitName = "GovernmentDB")
     private EntityManager entityManager;
-
-    @Resource
-    private UserTransaction transaction;
 
     @Override
     public Car getById(long id) {
@@ -31,46 +29,26 @@ public class CarServiceImpl implements CarService {
     }
 
     @Override
+    @Transactional
     public Car create(Car model) {
-        try {
-            transaction.begin();
-            entityManager.persist(model);
-            transaction.commit();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        entityManager.persist(model);
 
         return model;
     }
 
     @Override
+    @Transactional
     public Car update(Car model) {
-//        Car temp = entityManager.find(Car.class, model.getId());
-//        temp.setOwnershipHistoryList(model.getOwnershipHistoryList());
-
-        try {
-            transaction.begin();
-            entityManager.merge(model);
-            transaction.commit();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        entityManager.merge(model);
 
         return model;
     }
 
     @Override
+    @Transactional
     public boolean delete(long id) {
         Car carToDelete = entityManager.find(Car.class, id);
-
-        try {
-            transaction.begin();
-            entityManager.remove(carToDelete);
-            transaction.commit();
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
+        entityManager.remove(carToDelete);
 
         return true;
     }
