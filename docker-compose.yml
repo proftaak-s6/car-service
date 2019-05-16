@@ -9,7 +9,7 @@ services:
       DB_USER: mysql
       DB_PASS: mysql
     volumes:
-      - C:\Users\Niels\Desktop\S6\Proftaak\car-service\target:/usr/src/target
+      - ./target:/usr/src/target
     command: java -jar /usr/src/target/car-service-1.0-SNAPSHOT.jar
     ports:
       - 9100:8080
@@ -20,7 +20,7 @@ services:
     container_name: "wildfly_database"
     image: "mysql:latest"
     environment:
-      - MYSQL_DATABASE=projectdb
+      - MYSQL_DATABASE=default
       - MYSQL_USER=mysql
       - MYSQL_PASSWORD=mysql
       - MYSQL_ROOT_PASSWORD=supersecret
