@@ -2,12 +2,15 @@ version: "3"
 
 services:
   car:
+    image: maven:3.6.0-alpine
     container_name: "car-service"
-    build: .
     environment:
       DB_URL: jdbc:mysql://db:3306/default
       DB_USER: mysql
       DB_PASS: mysql
+    volumes:
+      - C:\Users\Niels\Desktop\S6\Proftaak\car-service\target:/usr/src/target
+    command: java -jar /usr/src/target/car-service-1.0-SNAPSHOT.jar
     ports:
       - 9100:8080
     depends_on:
