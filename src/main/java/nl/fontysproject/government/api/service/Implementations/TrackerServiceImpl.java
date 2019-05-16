@@ -7,6 +7,7 @@ import nl.fontysproject.government.api.service.Interfaces.TrackerService;
 import javax.annotation.Resource;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.transaction.Transactional;
 import javax.transaction.UserTransaction;
 import java.util.List;
 
@@ -14,9 +15,6 @@ public class TrackerServiceImpl implements TrackerService {
 
     @PersistenceContext(unitName = "GovernmentDB")
     private EntityManager entityManager;
-
-    @Resource
-    private UserTransaction transaction;
 
     @Override
     public Tracker getById(long id) {
@@ -29,60 +27,46 @@ public class TrackerServiceImpl implements TrackerService {
     }
 
     @Override
+    @Transactional
     public Tracker create(Tracker model) {
-        try {
-            transaction.begin();
-            entityManager.persist(model);
-            transaction.commit();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+
+        entityManager.persist(model);
+
 
         return model;
     }
 
     @Override
+    @Transactional
     public Tracker update(Tracker model) {
-        try {
-            transaction.begin();
-            entityManager.merge(model);
-            transaction.commit();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+
+        entityManager.merge(model);
+
 
         return model;
     }
 
     @Override
+    @Transactional
     public boolean delete(long id) {
         Tracker trackerToDelete = entityManager.find(Tracker.class, id);
 
-        try {
-            transaction.begin();
-            entityManager.remove(trackerToDelete);
-            transaction.commit();
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
+
+        entityManager.remove(trackerToDelete);
+
 
         return true;
     }
 
     @Override
+    @Transactional
     public Tracker assignToCar(long trackerId, long carId) {
         Tracker trackerToAssign = entityManager.find(Tracker.class, trackerId);
         Car carToAssignTo = entityManager.find(Car.class, carId);
         carToAssignTo.setTracker(trackerToAssign);
 
-        try {
-            transaction.begin();
-            entityManager.merge(carToAssignTo);
-            transaction.commit();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        entityManager.merge(carToAssignTo);
+
         return trackerToAssign;
     }
 }
