@@ -6,7 +6,7 @@ services:
     build: .
     image: yoksar/car-service
     environment:
-      DB_URL: jdbc:mysql://192.168.178.24:3306/default
+      DB_URL: jdbc:mysql://192.168.178.24:9010/projectdb
       DB_USER: mysql
       DB_PASS: mysql
     ports:
