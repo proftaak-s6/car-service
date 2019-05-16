@@ -2,6 +2,7 @@ package nl.fontysproject.government.api.web.resource;
 
 import nl.fontysproject.government.api.controller.CarController;
 import nl.fontysproject.government.api.model.Car;
+import nl.fontysproject.government.api.web.dto.CarDto;
 
 import javax.inject.Inject;
 import javax.ws.rs.*;
@@ -51,9 +52,9 @@ public class CarResource {
     @POST
     @Path("")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response createCar(Car newCar) {
+    public Response createCar(CarDto newCar) {
         return Response.ok()
-                .entity(carController.createCar(newCar))
+                .entity(carController.createCar(newCar.toModel()))
                 .build();
     }
 
