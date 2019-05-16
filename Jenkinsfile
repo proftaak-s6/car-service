@@ -39,7 +39,7 @@ pipeline {
             steps{
                 node("docker-prod"){
                     git([url: gitUrl, branch: 'master', credentialsId: 'Github'])
-                    // sh "docker service rm uptime-portal_overheidsportaal"
+                    sh "docker service rm car-service_car"
                     sh "docker stack deploy --with-registry-auth -c docker-compose.prod.yml car-service"
                 }
             }
