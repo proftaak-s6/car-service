@@ -32,6 +32,14 @@ public class TrackerResource {
                 .build();
     }
 
+    @GET
+    @Path("/available")
+    public Response getAvailable() {
+        return Response.ok()
+                .entity(trackerController.getAvailableTrackers())
+                .build();
+    }
+
     @POST
     @Path("")
     public Response createTracker(Tracker newTracker) {

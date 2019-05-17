@@ -36,4 +36,8 @@ public class TrackerController {
     public Tracker assignTrackerToCar(long trackerId, long carId) {
         return trackerService.assignToCar(trackerId, carId);
     }
+
+    public List<Tracker> getAvailableTrackers() {
+        return trackerService.getAvailableTrackers();
+    }
 }
