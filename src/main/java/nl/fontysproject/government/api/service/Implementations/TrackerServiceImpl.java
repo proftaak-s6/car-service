@@ -4,11 +4,9 @@ import nl.fontysproject.government.api.model.Car;
 import nl.fontysproject.government.api.model.Tracker;
 import nl.fontysproject.government.api.service.Interfaces.TrackerService;
 
-import javax.annotation.Resource;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
-import javax.transaction.UserTransaction;
 import java.util.List;
 
 public class TrackerServiceImpl implements TrackerService {
@@ -72,6 +70,6 @@ public class TrackerServiceImpl implements TrackerService {
 
     @Override
     public List<Tracker> getAvailableTrackers() {
-        return entityManager.createQuery("SELECT t FROM Tracker t WHERE t.car IS NULL", Tracker.class).getResultList();
+        return entityManager.createQuery("SELECT t FROM Tracker t JOIN t.car c WHERE c IS NULL", Tracker.class).getResultList();
     }
 }
