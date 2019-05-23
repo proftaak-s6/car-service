@@ -7,6 +7,7 @@ import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.util.List;
 
 @Path("/tracker")
 @Consumes(MediaType.APPLICATION_JSON)
@@ -30,6 +31,28 @@ public class TrackerResource {
         return Response.ok()
                 .entity(trackerController.getTrackerById(id))
                 .build();
+    }
+
+    @GET
+    @Path("/available")
+    public Response getAvailable() {
+        try {
+            List<Tracker> trackerList = trackerController.getAvailableTrackers();
+
+            if(trackerList.isEmpty()) {
+                return Response.status(
+                        Response.Status.NO_CONTENT.getStatusCode(),
+                        "No available trackers were found.")
+                        .build();
+            }
+
+            return Response.ok()
+                    .entity(trackerController.getAvailableTrackers())
+                    .build();
+
+        } catch (Exception e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode(), e.toString()).build();
+        }
     }
 
     @POST

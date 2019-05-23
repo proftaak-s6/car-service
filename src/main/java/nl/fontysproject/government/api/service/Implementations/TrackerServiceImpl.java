@@ -69,4 +69,9 @@ public class TrackerServiceImpl implements TrackerService {
 
         return trackerToAssign;
     }
+
+    @Override
+    public List<Tracker> getAvailableTrackers() {
+        return entityManager.createQuery("SELECT t FROM Tracker t WHERE t.car IS NULL", Tracker.class).getResultList();
+    }
 }
