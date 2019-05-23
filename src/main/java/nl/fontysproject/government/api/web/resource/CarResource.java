@@ -6,8 +6,12 @@ import nl.fontysproject.government.api.web.dto.CarDto;
 
 import javax.inject.Inject;
 import javax.ws.rs.*;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriInfo;
+import java.net.URI;
+import java.util.List;
 
 @Path("/car")
 @Consumes(MediaType.APPLICATION_JSON)
@@ -20,22 +24,37 @@ public class CarResource {
     @GET
     @Path("")
     public Response getAll() {
+        List<Car> carList = carController.getAllCars();
+        if (carList.isEmpty()){
+            return Response.status(Response.Status.NO_CONTENT.getStatusCode(), "No cars found").build();
+        }
+
         return Response.ok()
-                .entity(carController.getAllCars())
+                .entity(carList)
                 .build();
     }
 
     @GET
     @Path("/{id}")
     public Response getById(@PathParam("id") long id) {
+        Car car = carController.getCarById(id);
+        if (car == null){
+            return Response.status(Response.Status.NOT_FOUND.getStatusCode(), "No car found").build();
+        }
         return Response.ok()
-                .entity(carController.getCarById(id))
+                .entity(car)
                 .build();
     }
 
     @GET
     @Path("/rdw/{licensePlateNumber}")
     public Response getCarFromRDW(@PathParam("licensePlateNumber") String licensePlateNumber) {
+        Car car = carController.getCarByLicensePlateNumber(licensePlateNumber);
+
+        if (car == null){
+            return Response.status(Response.Status.NOT_FOUND.getStatusCode(), "No car found").build();
+        }
+
         return Response.ok()
                 .entity(carController.getCarFromRDW(licensePlateNumber))
                 .build();
@@ -44,6 +63,12 @@ public class CarResource {
     @GET
     @Path("/license-plate/{licensePlateNumber}")
     public Response getCarByLicensePlateNumber(@PathParam("licensePlateNumber") String licensePlateNumber) {
+        Car car = carController.getCarByLicensePlateNumber(licensePlateNumber);
+
+        if (car == null){
+            return Response.status(Response.Status.NOT_FOUND.getStatusCode(), "No car found").build();
+        }
+
         return Response.ok()
                 .entity(carController.getCarByLicensePlateNumber(licensePlateNumber))
                 .build();
@@ -52,10 +77,20 @@ public class CarResource {
     @POST
     @Path("")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response createCar(CarDto newCar) {
-        return Response.ok()
-                .entity(carController.createCar(newCar.toModel()))
+    public Response createCar(CarDto newCar, @Context UriInfo context) {
+        Car car;
+
+        try{
+            car = carController.createCar(newCar.toModel());
+        }catch (Exception e){
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode(), e.toString()).build();
+        }
+
+        URI location = context.getAbsolutePathBuilder()
+                .path(Long.toString(car.getId()))
                 .build();
+
+        return Response.status(Response.Status.CREATED.getStatusCode(), location.toString()).build();
     }
 
     // TODO: Decide if needed
@@ -63,14 +98,27 @@ public class CarResource {
     @Path("")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response updateCar(Car carToUpdate) {
+        Car car;
+
+        try{
+            car = carController.updateCar(carToUpdate);
+        }catch (Exception e){
+            return Response.status(Response.Status.NOT_MODIFIED.getStatusCode(), e.toString()).build();
+        }
         return Response.ok()
-                .entity(carController.updateCar(carToUpdate))
+                .entity(car)
                 .build();
     }
 
     @DELETE
     @Path("/{id}")
     public Response deleteCar(@PathParam("id") long id) {
+        try{
+            carController.deleteCar(id);
+        }catch (Exception e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode(), e.toString()).build();
+        }
+
         return Response.ok()
                 .entity(carController.deleteCar(id))
                 .build();
