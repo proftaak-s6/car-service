@@ -120,7 +120,6 @@ public class CarResource {
         }
 
         return Response.ok()
-                .entity(carController.deleteCar(id))
                 .build();
     }
 

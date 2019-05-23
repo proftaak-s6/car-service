@@ -2,11 +2,15 @@ package nl.fontysproject.government.api.web.resource;
 
 import nl.fontysproject.government.api.controller.TrackerController;
 import nl.fontysproject.government.api.model.Tracker;
+import nl.fontysproject.government.api.web.dto.TrackerDto;
 
 import javax.inject.Inject;
 import javax.ws.rs.*;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriInfo;
+import java.net.URI;
 import java.util.List;
 
 @Path("/tracker")
@@ -20,16 +24,25 @@ public class TrackerResource {
     @GET
     @Path("")
     public Response getAll() {
+        List<Tracker> trackerList = trackerController.getAllTrackers();
+        if(trackerList.isEmpty()){
+            return Response.status(Response.Status.NO_CONTENT.getStatusCode(), "No trackers found").build();
+        }
         return Response.ok()
-                .entity(trackerController.getAllTrackers())
+                .entity(trackerList)
                 .build();
     }
 
     @GET
     @Path("/{id}")
     public Response getById(@PathParam("id") long id) {
+        Tracker tracker = trackerController.getTrackerById(id);
+
+        if(tracker == null){
+            return Response.status(Response.Status.NOT_FOUND.getStatusCode(),"No tracker found").build();
+        }
         return Response.ok()
-                .entity(trackerController.getTrackerById(id))
+                .entity(tracker)
                 .build();
     }
 
@@ -57,10 +70,20 @@ public class TrackerResource {
 
     @POST
     @Path("")
-    public Response createTracker(Tracker newTracker) {
-        return Response.ok()
-                .entity(trackerController.createTracker(newTracker))
+    public Response createTracker(TrackerDto newTracker, @Context UriInfo context) {
+        Tracker tracker;
+
+        try{
+            tracker = trackerController.createTracker(newTracker.toModel());
+        } catch (Exception e){
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode(), e.toString()).build();
+        }
+
+        URI location = context.getAbsolutePathBuilder()
+                .path(Long.toString(tracker.getId()))
                 .build();
+
+        return Response.status(Response.Status.CREATED.getStatusCode(), location.toString()).build();
     }
 
     @PUT
@@ -74,16 +97,26 @@ public class TrackerResource {
     @DELETE
     @Path("/{id}")
     public Response deleteTracker(long id) {
+        try{
+            trackerController.deleteTracker(id);
+        }catch (Exception e){
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode(), e.toString()).build();
+        }
         return Response.ok()
-                .entity(trackerController.deleteTracker(id))
                 .build();
     }
 
     @PUT
     @Path("/assign/{trackerId}/to/{carId}")
     public Response assignTrackerToCar(@PathParam("trackerId") long trackerId, @PathParam("carId") long carId) {
+        Tracker tracker;
+        try{
+            tracker = trackerController.assignTrackerToCar(trackerId,carId);
+        }catch (Exception e){
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode(), e.toString()).build();
+        }
         return Response.ok()
-                .entity(trackerController.assignTrackerToCar(trackerId, carId))
+                .entity(tracker)
                 .build();
     }
 }
