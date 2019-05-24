@@ -25,6 +25,7 @@ public class Tracker {
     //region relations
 
     @OneToOne(mappedBy = "tracker")
+    @JoinColumn
     @JsonBackReference
     private Car car;
 
