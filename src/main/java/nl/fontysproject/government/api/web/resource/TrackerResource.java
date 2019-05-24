@@ -96,7 +96,7 @@ public class TrackerResource {
 
     @DELETE
     @Path("/{id}")
-    public Response deleteTracker(long id) {
+    public Response deleteTracker(@PathParam("id") long id) {
         try{
             trackerController.deleteTracker(id);
         }catch (Exception e){
