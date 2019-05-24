@@ -70,6 +70,9 @@ public class TrackerServiceImpl implements TrackerService {
 
     @Override
     public List<Tracker> getAvailableTrackers() {
-        return entityManager.createQuery("SELECT t FROM Tracker t JOIN t.car c WHERE c IS NULL", Tracker.class).getResultList();
+        return entityManager.createQuery("SELECT t.id, t.activationDate, t.manufacturer " +
+                                         "FROM Tracker t " +
+                                         "LEFT JOIN Car c ON t.id = c.tracker.id " +
+                                         "WHERE c.tracker.id IS NULL", Tracker.class).getResultList();
     }
 }
