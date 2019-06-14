@@ -68,4 +68,11 @@ public class CarServiceImpl implements CarService {
         int result = query.executeUpdate();
         return result == 1;
     }
+
+    @Override
+    public List<Car> getCarsWithTrackerByOwner(long ownerId) {
+        TypedQuery<Car> query = entityManager.createQuery("SELECT c FROM Car c WHERE c.tracker IS NOT NULL AND c.ownerId = :ownerId", Car.class);
+        query.setParameter("ownerId", ownerId);
+        return query.getResultList();
+    }
 }

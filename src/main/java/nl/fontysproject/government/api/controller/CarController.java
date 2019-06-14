@@ -79,6 +79,10 @@ public class CarController {
         return carService.update(carToAssign);
     }
 
+    public List<Car> getCarsWithTrackerByOwner(long ownerId) {
+        return carService.getCarsWithTrackerByOwner(ownerId);
+    }
+
     //region private methods
     private Car getCarFromJSON(String json) {
         JSONObject jsonObject = new JSONObject(json);

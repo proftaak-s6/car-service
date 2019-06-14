@@ -138,4 +138,18 @@ public class CarResource {
                 .entity(carController.assignOwnerToCar(carId, ownerId))
                 .build();
     }
+
+    @GET
+    @Path("/owner-id/{ownerId}")
+    public Response getCarsWithTrackerByOwner(@PathParam("ownerId") long ownerId) {
+        List<Car> carsList = carController.getCarsWithTrackerByOwner(ownerId);
+
+        if (carsList.isEmpty()) {
+            return Response.status(Response.Status.NOT_FOUND.getStatusCode(), "No cars found").build();
+        }
+
+        return Response.ok()
+                .entity(carsList)
+                .build();
+    }
 }

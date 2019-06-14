@@ -20,6 +20,9 @@ public class Tracker {
     @Column
     private Date activationDate;
 
+    @Column
+    private boolean isCoupled = false;
+
     //endregion
 
     //region relations
@@ -55,6 +58,14 @@ public class Tracker {
 
     public void setActivationDate(Date activationDate) {
         this.activationDate = activationDate;
+    }
+
+    public boolean isCoupled() {
+        return isCoupled;
+    }
+
+    public void setCoupled(boolean coupled) {
+        isCoupled = coupled;
     }
 
     public Car getCar() {
