@@ -29,6 +29,11 @@ public class CarServiceImpl implements CarService {
     }
 
     @Override
+    public List<Car> getCarsWithTracker() {
+        return entityManager.createQuery("SELECT c FROM Car c WHERE c.tracker IS NOT NULL", Car.class).getResultList();
+    }
+
+    @Override
     @Transactional
     public Car create(Car model) {
         entityManager.persist(model);

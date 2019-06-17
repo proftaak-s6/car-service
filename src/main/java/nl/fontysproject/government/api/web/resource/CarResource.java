@@ -35,6 +35,19 @@ public class CarResource {
     }
 
     @GET
+    @Path("with-tracker")
+    public Response getCarsWithTracker() {
+        List<Car> carList = carController.getCarsWithTracker();
+        if (carList.isEmpty()) {
+            return Response.status(Response.Status.NO_CONTENT.getStatusCode(), "No cars with trackers found").build();
+        }
+
+        return Response.ok()
+                .entity(carList)
+                .build();
+    }
+
+    @GET
     @Path("/{id}")
     public Response getById(@PathParam("id") long id) {
         Car car = carController.getCarById(id);

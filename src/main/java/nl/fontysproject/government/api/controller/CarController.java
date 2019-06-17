@@ -47,6 +47,10 @@ public class CarController {
         return carService.getAll();
     }
 
+    public List<Car> getCarsWithTracker() {
+        return carService.getCarsWithTracker();
+    }
+
     public Car createCar(Car model) {
         return carService.create(model);
     }
